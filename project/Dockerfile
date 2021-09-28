@@ -9,14 +9,16 @@ ENV APP_HOME=${HOME}/web
 RUN addgroup --system app 
 RUN adduser --system --group app
 
-# set working directory
-ENV HOME=/home/app
-ENV APP_HOME=${HOME}/web
-
 # create the appropriate directories
 # RUN mkdir $APP_HOME
 WORKDIR $HOME
 RUN chown app:app -R ${HOME}
+
+# add entrypoint.sh
+COPY ./entrypoint.sh .
+RUN ls
+RUN ls ${HOME}
+RUN chmod +x ${HOME}/entrypoint.sh
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -37,3 +39,6 @@ RUN pip install -r requirements.txt
 
 # add app
 COPY . .
+
+# run entrypoint.sh
+ENTRYPOINT ["/usr/app/entrypoint.sh"]
