@@ -6,7 +6,7 @@ import os
 import pytest
 from starlette.testclient import TestClient
 
-from app import main
+from app.main import create_application  # updated
 from app.config import get_settings, Settings
 
 
@@ -22,9 +22,9 @@ def test_app():
 #      export  DATABASE_URL=postgres://postgres:postgres@localhost:5432/web_dev        # new
 #      export  DATABASE_TEST_URL=postgres://postgres:postgres@localhost:5432/web_test  # new
 
-
-    main.app.dependency_overrides[get_settings] = get_settings_override
-    with TestClient(main.app) as test_client:
+    app = create_application()  # new
+    app.dependency_overrides[get_settings] = get_settings_override
+    with TestClient(app) as test_client:
 
         # testing
         yield test_client
